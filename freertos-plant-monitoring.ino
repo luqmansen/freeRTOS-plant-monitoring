@@ -15,6 +15,8 @@ LiquidCrystal lcd(RST, EN, D4, D5, D6, D7);
 
 void setup()
 {
+    lcd.begin(16, 2);
+    lcd.print("Plant-monitor");
     queue_1 = xQueueCreate(3, sizeof(float));
     if (queue_1 == NULL)
     {
@@ -36,8 +38,8 @@ void lcd_task(void *pvParameter)
         if (xQueueReceive(queue_1, &temperature, portMAX_DELAY == pdPASS))
         {
             lcd.setCursor(0, 0);
-            lcd.print("TEMPERATURE (c)");
-            lcd.setCursor(6, 1);
+            lcd.print("temp:");
+            lcd.setCursor(5,0);
             lcd.print(temperature);
         }
     }
@@ -50,7 +52,7 @@ void temp_task(void *pvParameters)
     {
         current_temp = read_temperature();
         xQueueSend(queue_1, &current_temp, portMAX_DELAY);
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(pdMS_TO_TICKS(100));
     }
 }
 
@@ -61,13 +63,10 @@ float read_temperature()
     int reading = analogRead(sensorPin);
     // converting that reading to voltage, for 3.3v arduino use 3.3
     float voltage = (reading * 5.0) / 1024;
-
     //converting from 10 mv per degree wit 500 mV offset
     //to degrees ((voltage - 500mV) times 100)
     float temperatureC = (voltage - 0.5) * 100;
-    Serial.print(temperatureC);
-    Serial.println(" degrees C");
-    return temperatureC
+    return temperatureC;
 }
 
 void loop(){}
