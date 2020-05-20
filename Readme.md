@@ -1,16 +1,23 @@
 # Free-RTOS Plant Monitoring 
-Plant montoring system utilizing realtime operating system
+Plant montoring system utilizing real time operating system [FreeRTOS](https://www.freertos.org/)
 
 ## Info
 - Still work in progress.
+- Proteus project included for simulation purpose
+- Proteus version is 8.6 SP 2 
 
-## Note
-- Developed on vscode, if you have your library stored elsewhere, please edit [this](.vscode/c_cpp_properties.json) file
+## What's working now
+- Temp sensor and LCD
+
+## Todo
+- Humidity sensor (DHT11, TMP36 will be replaced)
+- Soil Moisture sensor (SEN-13322)
+- Sunlight sensor (LDR)
 
 ## Component 
 - Arduino UNO
 - TMP36
-- LCD 16x2
+- LCD 16x4
 - More component soon
 
 ## Task
