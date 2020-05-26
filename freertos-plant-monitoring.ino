@@ -22,18 +22,21 @@ void setup()
 {
     Serial.begin(9600);
     Serial.println("Plant-monitor");
-
+    
 
     lcd.begin(16, 2);
     lcd.print("Plant-monitor");
-    queue_1 = xQueueCreate(3, sizeof(dhtData));
+    
+    queue_1 = xQueueCreate(10, sizeof(dhtData));
+    
     if (queue_1 == NULL)
     {
         Serial.println("Can't create queue");
     }
 
-//    xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 1, NULL);
-    xTaskCreate(dht11_task, "TEMPERATURE TASK", 200, NULL, 1, NULL);
+    xTaskCreate(dht11_task, "DHT11 TASK", 200, NULL, 1, NULL);
+    xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 0, NULL);
+    
     vTaskStartScheduler();
 }
 
