@@ -7,25 +7,29 @@ void dht11_task(void *pvParameters)
 {
     while (1)
     {
-      struct dhtData data;
+      dhtData data;
       data = read_dht11();
-      xQueueSend(queue_1, &data, portMAX_DELAY);
-      taskYIELD();
+      if (data.valid == true){
+        xQueueSend(queue_1, &data, portMAX_DELAY);
+        taskYIELD();  
+      }
     }
  
 }
 
 dhtData read_dht11()
 {
-  struct dhtData data;
+  dhtData data;
   int chk = DHT11.read(DHT11PIN);
   if(chk != 0){
     Serial.print("[ERROR] Read dht11 error: ");
     Serial.println(chk);
+    data.valid = false;
   }
   else {
     data.temp = (float)DHT11.temperature;
     data.humidity = (float)DHT11.humidity;
+    data.valid = true;
     delay(100);
     return data;
     }

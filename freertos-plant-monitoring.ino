@@ -12,10 +12,11 @@
 QueueHandle_t queue_1;
 LiquidCrystal lcd(RST, EN, D4, D5, D6, D7);
 
-struct dhtData {
+typedef struct{
+  bool valid;
   long temp;
   long humidity;
-};
+}dhtData;
 
 
 void setup()
@@ -27,7 +28,7 @@ void setup()
     lcd.begin(16, 2);
     lcd.print("Plant-monitor");
     
-    queue_1 = xQueueCreate(10, sizeof(dhtData));
+    queue_1 = xQueueCreate(3, sizeof(dhtData));
     
     if (queue_1 == NULL)
     {
@@ -35,7 +36,7 @@ void setup()
     }
 
     xTaskCreate(dht11_task, "DHT11 TASK", 200, NULL, 1, NULL);
-    xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 0, NULL);
+    xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 1, NULL);
     
     vTaskStartScheduler();
 }

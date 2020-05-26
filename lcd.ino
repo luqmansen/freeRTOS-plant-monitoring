@@ -1,12 +1,11 @@
 
 void lcd_task(void *pvParameter)
 {
-    struct dhtData data;
+    dhtData data;
     lcd.begin(16, 2);
     while (1)
     {
-//        lcd.clear();
-        if (xQueueReceive(queue_1, &data, portMAX_DELAY == pdPASS))
+        if (xQueueReceive(queue_1, &data, portMAX_DELAY) == pdPASS)
         {
             lcd.setCursor(0, 0);
             lcd.print("temp (C):");
@@ -17,5 +16,6 @@ void lcd_task(void *pvParameter)
             lcd.setCursor(13,1);
             lcd.print(data.humidity);
         }
+        taskYIELD();
     }
 }
