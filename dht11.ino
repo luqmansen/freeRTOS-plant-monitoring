@@ -4,33 +4,35 @@
 dht11 DHT11;
 
 void dht11_task(void *pvParameters)
-{
+{ 
+    sensorData data;
     while (1)
     {
-      dhtData data;
       data = read_dht11();
-      if (data.valid == true){
-        xQueueSend(queue_1, &data, portMAX_DELAY);
-        taskYIELD();  
+      if (data.dht.valid == true){
+        xQueueSend(queue_1, &data, portMAX_DELAY); 
       }
+      taskYIELD(); 
     }
  
 }
 
-dhtData read_dht11()
+sensorData read_dht11()
 {
-  dhtData data;
+  sensorData data;
   int chk = DHT11.read(DHT11PIN);
   if(chk != 0){
     Serial.print("[ERROR] Read dht11 error: ");
     Serial.println(chk);
-    data.valid = false;
+    data.dht.valid = false;
+    return data;
   }
   else {
-    data.temp = (float)DHT11.temperature;
-    data.humidity = (float)DHT11.humidity;
-    data.valid = true;
+    data.type = dht_sensor;
+    data.dht.temp = (float)DHT11.temperature;
+    data.dht.humidity = (float)DHT11.humidity;
+    data.dht.valid = true;
     delay(100);
     return data;
-    }
+    };
 }
