@@ -1,6 +1,8 @@
 #include <Arduino_FreeRTOS.h>
 #include <queue.h>
 #include <LiquidCrystal.h>
+#include <dht11.h>
+
 
 #define RST 12
 #define EN 11
@@ -8,6 +10,8 @@
 #define D5 4
 #define D6 3
 #define D7 2
+#define MQ9 7
+#define DHT11PIN 6
 
 enum sensor_msg_type{dht_sensor, ldr_sensor};
 
@@ -33,6 +37,8 @@ void setup()
     lcd.begin(16, 4);
     lcd.print("Plant-monitor");
     
+    pinMode(MQ9, INPUT);
+    
     queue_1 = xQueueCreate(3, sizeof(sensorData));
     
     if (queue_1 == NULL)
@@ -42,7 +48,7 @@ void setup()
 
     xTaskCreate(dht11_task, "DHT11 TASK", 200, NULL, 2, NULL);
     xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 1, NULL);
-    
+    xTaskCreate(mq9_task, "MQ-9 GAS TASK", 200, NULL, 3, NULL);
     vTaskStartScheduler();
 }
 

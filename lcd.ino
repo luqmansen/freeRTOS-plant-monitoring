@@ -8,11 +8,11 @@ void lcd_task(void *pvParameter)
         if (xQueueReceive(queue_1, &data, portMAX_DELAY) == pdPASS)
         {   
             if (data.type == dht_sensor){
-              lcd.print("temp (C):");
+              lcd.print("temp(C):");
               lcd.setCursor(9,0);
               lcd.print(data.dht.temp);
               lcd.setCursor(0, 1);
-              lcd.print("humidity (%):");
+              lcd.print("humidity(%):");
               lcd.setCursor(13,1);
               lcd.print(data.dht.humidity);
             }
