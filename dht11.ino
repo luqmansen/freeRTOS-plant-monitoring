@@ -10,6 +10,7 @@ void dht11_task(void *pvParameters)
       data = read_dht11();
       if (data.dht.valid == true){
         xQueueSend(queue_1, &data, portMAX_DELAY); 
+        Serial.println("[INFO] DHT data sent");
       }
       taskYIELD(); 
     }

@@ -11,9 +11,10 @@
 #define D6 3
 #define D7 2
 #define MQ9 7
+#define LDR A0
 #define DHT11PIN 6
 
-enum sensor_msg_type{dht_sensor, ldr_sensor};
+enum sensor_msg_type{dht_sensor, ldr_sensor, mq9_sensor};
 
 typedef struct{
   bool valid;
@@ -22,9 +23,19 @@ typedef struct{
 }dhtData;
 
 typedef struct{
+  float value;
+}analogData;
+
+typedef struct{
+  int value;
+}digitalData;
+
+typedef struct{
   enum sensor_msg_type type;
   union {
     dhtData dht;
+    analogData analog;
+    digitalData digital;
   };
 }sensorData;
 
@@ -46,9 +57,10 @@ void setup()
         Serial.println("[ERROR] Can't create queue");
     }
 
-    xTaskCreate(dht11_task, "DHT11 TASK", 200, NULL, 2, NULL);
     xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 1, NULL);
+    xTaskCreate(dht11_task, "DHT11 TASK", 200, NULL, 3, NULL);
     xTaskCreate(mq9_task, "MQ-9 GAS TASK", 200, NULL, 3, NULL);
+    xTaskCreate(ldr_task, "LDR TASK", 200, NULL, 3, NULL);
     vTaskStartScheduler();
 }
 
