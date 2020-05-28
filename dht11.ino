@@ -23,8 +23,7 @@ sensorData read_dht11()
   sensorData data;
   int chk = DHT11.read(DHT11PIN);
   if(chk != 0){
-    Serial.print("[ERROR] Read dht11 error: ");
-    Serial.println(chk);
+    Serialprint("[ERROR] Read dht11 error: %d \n", chk);
     data.dht.valid = false;
     return data;
   }
