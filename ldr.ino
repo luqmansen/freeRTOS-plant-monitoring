@@ -6,8 +6,10 @@ void ldr_task(void *pvParameter){
   sensorData data;
     while (1)
     {
+      Serial.println("[INFO] LDR TASK");
       data = readLDR();
-      xQueueSend(queue_1, &data, portMAX_DELAY); 
+      sendQueue(&data);
+      Serial.println("[INFO] LDR data sent");
       taskYIELD(); 
     }
 }

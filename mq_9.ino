@@ -5,8 +5,10 @@ void mq9_task(void *pvParameter){
   sensorData data;
     while (1)
     {
+      Serial.println("[INFO] MQ9 TASK");
       data = readMQ9();
-      xQueueSend(queue_1, &data, portMAX_DELAY); 
+      sendQueue(&data);
+      Serial.println("[INFO] MQ9 data sent"); 
       taskYIELD(); 
     }
 }

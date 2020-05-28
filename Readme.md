@@ -13,6 +13,7 @@ Plant montoring system utilizing real time operating system [FreeRTOS](https://w
 ## Issues
 - If `lcd_task` has higher priority than other task (currently `dht11_task`), sensor reading will throw `DHTlib_error_timeout`, this can be solved by setting the priority for lcd task lower than other, but LCD data update will show noticeable delay
 - if two task that input to queue has same priority, the simulation will stuck 
+- Memory not sufficient, need help to optimize the code
 
 ## Todo
 - Implementing semaphore for task

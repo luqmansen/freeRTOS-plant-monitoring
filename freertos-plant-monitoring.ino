@@ -2,6 +2,8 @@
 #include <queue.h>
 #include <LiquidCrystal.h>
 #include <dht11.h>
+#include <semphr.h>
+#include <MemoryFree.h>
 
 
 #define RST 12
@@ -40,6 +42,8 @@ typedef struct{
 }sensorData;
 
 QueueHandle_t queue_1;
+SemaphoreHandle_t xMutex;
+BaseType_t xReturned;
 LiquidCrystal lcd(RST, EN, D4, D5, D6, D7);
 
 void setup()
@@ -50,18 +54,7 @@ void setup()
     
     pinMode(MQ9, INPUT);
     
-    queue_1 = xQueueCreate(3, sizeof(sensorData));
-    
-    if (queue_1 == NULL)
-    {
-        Serial.println("[ERROR] Can't create queue");
-    }
-
-    xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 1, NULL);
-    xTaskCreate(dht11_task, "DHT11 TASK", 200, NULL, 3, NULL);
-    xTaskCreate(mq9_task, "MQ-9 GAS TASK", 200, NULL, 3, NULL);
-    xTaskCreate(ldr_task, "LDR TASK", 200, NULL, 3, NULL);
-    vTaskStartScheduler();
+    initRTOS();
 }
 
 void loop(){}

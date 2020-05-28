@@ -6,6 +6,7 @@ void lcd_task(void *pvParameter)
     lcd.clear();
     while (1)
     {
+        Serial.println("[INFO] LCD TASK");
         if (xQueueReceive(queue_1, &data, portMAX_DELAY) == pdPASS)
         {   
             Serial.print("[INF0] received: ");
