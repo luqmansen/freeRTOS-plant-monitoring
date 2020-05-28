@@ -21,35 +21,34 @@ void createTask(){
     
     vTaskStartScheduler();
     checkMemory();
-    Serial.println("[INFO] Task schedule started");
+    Serial.println(F("[INFO] Task schedule started"));
 }
 
 void createQueue(){
     queue_1 = xQueueCreate(2, sizeof(sensorData));
     if (queue_1 == NULL)
     {
-        Serial.println("[ERROR] Can't create queue");
+        Serial.println(F("[ERROR] Can't create queue"));
     }
-    Serial.println("[INFO] Queue created");
+    Serial.println(F("[INFO] Queue created"));
 }
 
 void createMutex(){
   xMutex = xSemaphoreCreateMutex();
     if (xMutex == NULL){
-      Serial.println("[ERROR] Can't create mutex");
+      Serial.println(F("[ERROR] Can't create mutex"));
     }
-    Serial.println("[INFO] Mutex created");
+    Serial.println(F("[INFO] Mutex created"));
 }
 
 void checkTaskCreation(String task_name, BaseType_t xReturned){
   if (xReturned == pdPASS){
-    Serial.print("[INFO] created ");
-    Serial.print(task_name);
-    Serial.println(" task");
+    Serial.print(F("[INFO] created "));
+    Serial.println(task_name);
   } else if (xReturned == errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY){
-    Serial.println("[ERROR] Can't create Task, memory allocation error");
+    Serial.println(F("[ERROR] Can't create Task, memory allocation error"));
   }else{
-    Serial.println("[ERROR] Create task unknown error");
+    Serial.println(F("[ERROR] Create task unknown error"));
   }
   checkMemory();
 }

@@ -11,7 +11,7 @@ void lcd_task(void *pvParameter)
         {   
             Serial.print("[INF0] received: ");
             if (data.type == dht_sensor){
-              Serial.println("DHT");  
+              Serial.println(F("DHT"));  
               lcd.print("temp(C): ");
               lcd.setCursor(10,0);
               lcd.print(data.dht.temp);
@@ -20,7 +20,7 @@ void lcd_task(void *pvParameter)
               lcd.setCursor(14,1);
               lcd.print(data.dht.humidity);
             } else if (data.type == ldr_sensor){
-              Serial.println("LDR");  
+              Serial.println(F("LDR"));  
               lcd.setCursor(0,2);
               lcd.print("lux: ");
               lcd.setCursor(6,2);
