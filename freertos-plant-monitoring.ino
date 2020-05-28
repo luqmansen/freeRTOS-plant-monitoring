@@ -52,9 +52,8 @@ void setup()
     checkMemory();
     lcd.begin(16, 4);
     lcd.print("Plant-monitor");
-    
+
     pinMode(MQ9, INPUT);
-    
     initRTOS();
 }
 

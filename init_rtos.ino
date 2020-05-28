@@ -6,26 +6,26 @@ void initRTOS(){
 }
 
 void createTask(){
-    xReturned = xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 3, NULL);
+    xReturned = xTaskCreate(lcd_task, "LCD TASK", 200, NULL, 1, NULL);
     checkTaskCreation("LCD", xReturned);
     
     xReturned = xTaskCreate(dht11_task, "DHT11 TASK", 200, NULL, 3, NULL);
     checkTaskCreation("DHT11" ,xReturned);
     
-//    xReturned = xTaskCreate(mq9_task, "MQ-9 GAS TASK", 200, NULL, 3, NULL);
-//    checkTaskCreation("MQ-9",xReturned);
-//    
-//    xReturned = xTaskCreate(ldr_task, "LDR TASK", 200, NULL, 3, NULL);
-//    checkTaskCreation("LDR", xReturned);
-
+    xReturned = xTaskCreate(mq9_task, "MQ-9 GAS TASK", 200, NULL, 3, NULL);
+    checkTaskCreation("MQ-9",xReturned);
     
+    xReturned = xTaskCreate(ldr_task, "LDR TASK", 200, NULL, 3, NULL);
+    checkTaskCreation("LDR", xReturned);
+
     vTaskStartScheduler();
     checkMemory();
     Serialprint("[INFO] Task schedule started \n");
 }
 
 void createQueue(){
-    queue_1 = xQueueCreate(2, sizeof(sensorData));
+    Serialprint("[INFO] Creating queue with size of %d\r",sizeof(sensorData));
+    queue_1 = xQueueCreate(4, sizeof(sensorData));
     if (queue_1 == NULL)
     {
         Serialprint("[ERROR] Can't create queue \r");
