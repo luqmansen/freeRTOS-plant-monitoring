@@ -1,7 +1,7 @@
 #include <Arduino_FreeRTOS.h>
 #include <queue.h>
 #include <LiquidCrystal.h>
-#include <dht11.h>
+#include <dht.h>
 #include <semphr.h>
 #include <MemoryFree.h>
 
@@ -15,6 +15,19 @@
 #define MQ9 7
 #define LDR A0
 #define DHT11PIN 6
+
+#define DEBUG 1 // Switch debug output on and off by 1 or 0
+
+#if DEBUG
+#define PRINTS(s)   { Serial.print(F(s)); }
+#define PRINT(s,v)  { Serial.print(F(s)); Serial.print(v); }
+#define PRINTX(s,v) { Serial.print(F(s)); Serial.print(F("0x")); Serial.print(v, HEX); }
+#else
+#define PRINTS(s)
+#define PRINT(s,v)
+#define PRINTX(s,v)
+#endif
+
 
 enum sensor_msg_type{dht_sensor, ldr_sensor, mq9_sensor};
 
@@ -48,7 +61,9 @@ LiquidCrystal lcd(RST, EN, D4, D5, D6, D7);
 
 void setup()
 {
-    Serial.begin(9600);
+    #ifdef DEBUG
+      Serial.begin(9600);
+    #endif
     lcd.begin(16, 4);
     lcd.print("Plant-monitor");
     

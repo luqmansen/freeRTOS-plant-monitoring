@@ -1,19 +1,19 @@
-
-
-dht11 DHT11;
+dht dht;
 
 void dht11_task(void *pvParameters)
 { 
     sensorData data;
     while (1)
     {
-      Serial.println("[INFO] DHT TASK");
+      PRINTS("\r[INFO] DHT TASK SENDING DATA");
       data = read_dht11();
       if (data.dht.valid == true){
-        sendQueue(&data);
-        Serial.println("[INFO] DHT data sent");
+        sendQueue(data);
+        PRINTS("\r[INFO] DHT data sent");
       }
-      taskYIELD(); 
+//      taskYIELD(); 
+        xTaskDelay(10);
+
     }
  
 }
@@ -21,18 +21,20 @@ void dht11_task(void *pvParameters)
 sensorData read_dht11()
 {
   sensorData data;
-  int chk = DHT11.read(DHT11PIN);
+  int chk = dht.read11(DHT11PIN);
   if(chk != 0){
-    Serial.print("[ERROR] Read dht11 error: ");
-    Serial.println(chk);
+    PRINT("\r[ERROR] Read dht11 error: ", chk);
     data.dht.valid = false;
     return data;
   }
   else {
     data.type = dht_sensor;
-    data.dht.temp = (float)DHT11.temperature;
-    data.dht.humidity = (float)DHT11.humidity;
+    data.dht.temp = dht.temperature;
+    data.dht.humidity = dht.humidity;
     data.dht.valid = true;
+    PRINT("\r[INFO] data type :", data.type);
+    PRINT("\r[INFO] read temp :", data.dht.temp);
+    PRINT("\r[INFO] read humidity :", data.dht.humidity);    
     delay(100);
     return data;
     };

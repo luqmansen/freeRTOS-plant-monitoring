@@ -1,4 +1,3 @@
 void checkMemory(){
-  Serial.print("[INFO] free memory: ");
-  Serial.println(freeMemory());
+  PRINT("\r[INFO] free memory: ", freeMemory());
 }

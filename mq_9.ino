@@ -7,7 +7,7 @@ void mq9_task(void *pvParameter){
     {
       Serial.println("[INFO] MQ9 TASK");
       data = readMQ9();
-      sendQueue(&data);
+      sendQueue(data);
       Serial.println("[INFO] MQ9 data sent"); 
       taskYIELD(); 
     }

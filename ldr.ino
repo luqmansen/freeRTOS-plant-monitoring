@@ -6,11 +6,13 @@ void ldr_task(void *pvParameter){
   sensorData data;
     while (1)
     {
-      Serial.println("[INFO] LDR TASK");
+      PRINTS("\r[INFO] LDR TASK");
       data = readLDR();
-      sendQueue(&data);
-      Serial.println("[INFO] LDR data sent");
-      taskYIELD(); 
+      sendQueue(data);
+      PRINTS("[INFO] LDR data sent");
+//      taskYIELD(); 
+//        xTaskDelay(10);
+
     }
 }
 
@@ -19,10 +21,8 @@ sensorData readLDR(){
     data.type = ldr_sensor;
     analogReading = analogRead(LDR);
     data.analog.value = calculateLux(analogReading);
-    Serial.print("[INFO] LDR | raw: ");
-    Serial.print(analogReading);
-    Serial.print("| lux: ");
-    Serial.println(data.analog.value);  
+    PRINT("\r[INFO] LDR | raw: ", analogReading );
+    PRINT("\r[INFO] LDR | lux: ", data.analog.value);
     return data;
 }
 

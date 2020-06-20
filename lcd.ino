@@ -2,16 +2,16 @@
 void lcd_task(void *pvParameter)
 {
     sensorData data;
-    lcd.setCursor(0, 0);
     lcd.clear();
     while (1)
     {
-        Serial.println("[INFO] LCD TASK");
+        PRINTS("\r[INFO] LCD TASK");
         if (xQueueReceive(queue_1, &data, portMAX_DELAY) == pdPASS)
         {   
-            Serial.print("[INF0] received: ");
+            PRINTS("\r[INF0] received: ");
             if (data.type == dht_sensor){
               Serial.println("DHT");  
+              lcd.setCursor(0,0);
               lcd.print("temp(C): ");
               lcd.setCursor(10,0);
               lcd.print(data.dht.temp);
@@ -27,6 +27,8 @@ void lcd_task(void *pvParameter)
               lcd.print(data.analog.value);
             }
         }
-        taskYIELD();
+//        taskYIELD();
+        xTaskDelay(10);
+
     }
 }
