@@ -1,7 +1,7 @@
 #include <Arduino_FreeRTOS.h>
 #include <queue.h>
 #include <LiquidCrystal.h>
-#include <dht11.h>
+#include <dht.h>
 #include <semphr.h>
 #include <MemoryFree.h>
 
@@ -15,6 +15,19 @@
 #define MQ9 7
 #define LDR A0
 #define DHT11PIN 6
+
+#define DEBUG 1 // Switch debug output on and off by 1 or 0
+
+#if DEBUG
+#define PRINTS(s)   { Serial.print(F(s)); }
+#define PRINT(s,v)  { Serial.print(F(s)); Serial.print(v); }
+#define PRINTX(s,v) { Serial.print(F(s)); Serial.print(F("0x")); Serial.print(v, HEX); }
+#else
+#define PRINTS(s)
+#define PRINT(s,v)
+#define PRINTX(s,v)
+#endif
+
 
 enum sensor_msg_type{dht_sensor, ldr_sensor, mq9_sensor};
 
@@ -48,33 +61,15 @@ LiquidCrystal lcd(RST, EN, D4, D5, D6, D7);
 
 void setup()
 {
-    Serial.begin(9600);
-    checkMemory();
+    #ifdef DEBUG
+      Serial.begin(9600);
+    #endif
     lcd.begin(16, 4);
     lcd.print("Plant-monitor");
 
     pinMode(MQ9, INPUT);
     initRTOS();
 }
-
-void StreamPrint_progmem(Print &out,PGM_P format,...)
-{
-  // program memory version of printf - copy of format string and result share a buffer
-  // so as to avoid too much memory use
-  char formatString[128], *ptr;
-  strncpy_P( formatString, format, sizeof(formatString) ); // copy in from program mem15
-  // null terminate - leave last char since we might need it in worst case for result's \0
-  formatString[ sizeof(formatString)-2 ]='\0';
-  ptr=&formatString[ strlen(formatString)+1 ]; // our result buffer...
-  va_list args;
-  va_start (args,format);
-  vsnprintf(ptr, sizeof(formatString)-1-strlen(formatString), formatString, args );
-  va_end (args);
-  formatString[ sizeof(formatString)-1 ]='\0';
-  out.print(ptr);
-}
-#define Serialprint(format, ...) StreamPrint_progmem(Serial,PSTR(format),##__VA_ARGS__)
-#define Streamprint(stream,format, ...) StreamPrint_progmem(stream,PSTR(format),##__VA_ARGS__)
 
 void loop(){}
 

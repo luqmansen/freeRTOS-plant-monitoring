@@ -1,3 +1,3 @@
 void checkMemory(){
-  Serialprint("[INFO] free memory: %d\r",freeMemory());
+  PRINT("\r[INFO] free memory: ", freeMemory());
 }
