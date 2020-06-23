@@ -1,16 +1,15 @@
 
-void lcd_task(void *pvParameter)
+void lcd_task(void *pvParameters)
 {
-    sensorData data;
-    lcd.clear();
-    while (1)
+    (void) pvParameters;
+    for (;;)
     {
-        PRINTS("\r[INFO] LCD TASK");
-        if (xQueueReceive(queue_1, &data, portMAX_DELAY) == pdPASS)
+        sensorData data;
+        PRINTI("LCD TASK");
+        if (xQueueReceive(queue_1, &data, 10) == pdPASS)
         {   
-            PRINTS("\r[INF0] received: ");
             if (data.type == dht_sensor){
-              Serial.println("DHT");  
+              PRINTI("DHT");  
               lcd.setCursor(0,0);
               lcd.print("temp(C): ");
               lcd.setCursor(10,0);
@@ -20,14 +19,15 @@ void lcd_task(void *pvParameter)
               lcd.setCursor(14,1);
               lcd.print(data.dht.humidity);
             } else if (data.type == ldr_sensor){
-              Serial.println("LDR");  
+              PRINTI("LDR");  
               lcd.setCursor(0,2);
               lcd.print("lux: ");
               lcd.setCursor(6,2);
               lcd.print(data.analog.value);
-            }
+            } else{
+              PRINTW("Empty data"); 
+             }
         }
-//        taskYIELD();
-
+        vTaskDelay( xDelay );
     }
 }

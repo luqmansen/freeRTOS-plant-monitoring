@@ -1,3 +1,3 @@
 void checkMemory(){
-  PRINT("\r[INFO] free memory: ", freeMemory());
+//  PRINT("free memory: ", freeMemory());/
 }

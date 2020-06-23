@@ -1,7 +1,8 @@
 
 void sendQueue(sensorData data){
-  PRINTS("\r[INFO] Trying to send data"); 
-  xSemaphoreTake(xMutex, portMAX_DELAY);
+  PRINTI("Trying to send data");
+//  xSemaphoreTake(xMutex, portMAX_/DELAY);
   xQueueSend(queue_1, &data, portMAX_DELAY); 
-  xSemaphoreGive(xMutex);
+//  xSemaphoreGive(xMutex);/
+  PRINTI("Data sent");
 }

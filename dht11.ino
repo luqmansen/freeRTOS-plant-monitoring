@@ -1,21 +1,24 @@
-dht dht;
 
-void dht11_task(void *pvParameters)
+void dht11_task(void* pvParameters)
 { 
+  (void) pvParameters;
+  for (;;)
+  {
     sensorData data;
-    for (;;)
-    {
-      PRINTS("\r[INFO] DHT TASK SENDING DATA");
-      data = read_dht11();
-      if (data.dht.valid == true){
-        sendQueue(data);
-        PRINTS("\r[INFO] DHT data sent");
-
-      }
-//      taskYIELD(); 
-
+    data = read_dht11();
+    if (data.dht.valid == true){
+      #ifdef BLYNK
+       Blynk.virtualWrite(VIRT_DHT_TEMP, data.dht.temp);
+       Blynk.virtualWrite(VIRT_DHT_HUMID, data.dht.humidity);
+      #endif
+      PRINT("temp:", data.dht.temp);
+      PRINT("humidity:", data.dht.humidity);
+      sendQueue(data);
+      vTaskDelay( xDelay );
     }
- 
+    
+    taskYIELD();
+  }
 }
 
 sensorData read_dht11()
@@ -23,8 +26,10 @@ sensorData read_dht11()
   sensorData data;
   int chk = dht.read11(DHT11PIN);
   if(chk != 0){
-    PRINT("\r[ERROR] Read dht11 error: ", chk);
-    data.dht.valid = false;
+    PRINTE("Read dht11 error");
+    data.dht.temp = 10;
+    data.dht.humidity = 10;
+    data.dht.valid = true;
     return data;
   }
   else {
@@ -32,10 +37,7 @@ sensorData read_dht11()
     data.dht.temp = dht.temperature;
     data.dht.humidity = dht.humidity;
     data.dht.valid = true;
-    PRINT("\r[INFO] data type :", data.type);
-    PRINT("\r[INFO] read temp :", data.dht.temp);
-    PRINT("\r[INFO] read humidity :", data.dht.humidity);    
-    delay(100);
+    delay(500);
     return data;
     };
 }
